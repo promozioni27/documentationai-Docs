@@ -1,0 +1,245 @@
+---
+title: Configuration
+description: Learn how to customize settings, preferences, and environment-specific options. Use this page when you need to tailor the product to your team or deployment.
+---
+
+## Overview
+
+Configuration lets you adapt IL MIO FASCICOLO SANITARIO to your team, your deployment model, and each user’s workflow. You can tune general settings, user preferences, environment-specific values, notifications, and access controls without changing the core product behavior.
+
+This page is a starter kit template. Use it as a foundation, then replace the sample settings, endpoints, and names with your own values.
+
+<Callout kind="info">
+  Keep configuration values in environment files or secured settings stores. Avoid hard-coding secrets, tokens, or private URLs in source code.
+</Callout>
+
+## Common configuration areas
+
+<Columns cols={2}>
+  <Card title="General settings" icon="settings" href="#general-settings">
+    
+    Control product name, locale, and default workspace behavior.
+
+  </Card>
+  <Card title="User preferences" icon="users" href="#user-preferences">
+    
+    Let each person choose language, theme, and notification style.
+
+  </Card>
+  <Card title="Environment options" icon="terminal" href="#environment-options">
+    
+    Separate development, staging, and production values cleanly.
+
+  </Card>
+  <Card title="Access and display" icon="shield" href="#access-and-display">
+    
+    Define roles, visibility, and layout defaults for your deployment.
+
+  </Card>
+</Columns>
+
+## General settings
+
+Use general settings for values that should stay consistent across the application. These usually include your brand label, date format, default region, and support contact information.
+
+| Setting | Example value | Purpose |
+| --- | --- | --- |
+| Product name | IL MIO FASCICOLO SANITARIO | Shows in the interface and email templates |
+| Default locale | it-IT | Sets the initial language and formatting |
+| Time zone | Europe/Rome | Aligns timestamps and reminders |
+| Support email | support@example.com | Gives users a contact point |
+
+### Example configuration file
+
+The example below shows a simple JSON-based settings file. It includes realistic values you can adapt for your own deployment.
+
+```json
+{
+  "productName": "IL MIO FASCICOLO SANITARIO",
+  "defaultLocale": "it-IT",
+  "timeZone": "Europe/Rome",
+  "dateFormat": "dd/MM/yyyy",
+  "supportEmail": "support@example.com",
+  "enableAuditLog": true
+}
+```
+
+## User preferences
+
+User preferences should be personal, lightweight, and reversible. You can store them in a profile table, a browser setting, or a user preferences API.
+
+<CodeGroup tabs="JavaScript,Python">
+  ```javascript
+  const userPreferences = {
+    theme: "light",
+    language: "it-IT",
+    emailNotifications: true,
+    compactView: false
+  };
+
+  await fetch("https://api.example.com/user/preferences", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer YOUR_TOKEN"
+    },
+    body: JSON.stringify(userPreferences)
+  });
+  ```
+
+  ```python
+  import requests
+
+  user_preferences = {
+      "theme": "light",
+      "language": "it-IT",
+      "emailNotifications": True,
+      "compactView": False,
+  }
+
+  response = requests.put(
+      "https://api.example.com/user/preferences",
+      json=user_preferences,
+      headers={
+          "Content-Type": "application/json",
+          "Authorization": "Bearer YOUR_TOKEN",
+      },
+      timeout=10,
+  )
+  ```
+</CodeGroup>
+
+### Recommended preference fields
+
+- Theme: `light` or `dark`
+- Language: user-selected locale
+- Density: standard or compact
+- Notification frequency: instant, daily, or weekly
+
+## Environment options
+
+Use environment-specific values to keep local development isolated from production. This helps you test safely while keeping production credentials and endpoints separate.
+
+<Tabs>
+  <Tab title="Development" icon="terminal">
+    
+    Development settings usually point to sandbox services and verbose logging.
+
+    ```bash
+    APP_ENV=development
+    API_BASE_URL=https://api.example.com
+    LOG_LEVEL=debug
+    ENABLE_MOCK_DATA=true
+    ```
+
+  </Tab>
+  <Tab title="Staging" icon="monitor">
+    
+    Staging should mirror production closely, but use test credentials and lower-risk data.
+
+    ```bash
+    APP_ENV=staging
+    API_BASE_URL=https://api.example.com
+    LOG_LEVEL=info
+    ENABLE_MOCK_DATA=false
+    ```
+
+  </Tab>
+  <Tab title="Production" icon="check-circle">
+    
+    Production should use secure storage and restrictive defaults.
+
+    ```bash
+    APP_ENV=production
+    API_BASE_URL=https://api.example.com
+    LOG_LEVEL=warn
+    ENABLE_MOCK_DATA=false
+    ```
+
+  </Tab>
+</Tabs>
+
+## Notifications
+
+Notifications help users stay informed without overwhelming them. Start with a small set of event types and expand only when you can explain why each alert matters.
+
+<Steps>
+  <Step title="Choose event types" icon="bell">
+    
+    Pick the events you want to notify on, such as account changes, document updates, or access requests.
+
+  </Step>
+  <Step title="Set delivery channels" icon="mail">
+    
+    Decide whether each event should go to email, in-app messages, or both.
+
+  </Step>
+  <Step title="Add user controls" icon="settings">
+    
+    Let users mute, pause, or customize notifications from their profile page.
+
+  </Step>
+  <Step title="Review frequency" icon="bar-chart">
+    
+    Prevent noisy alerts by grouping low-priority events into summaries.
+
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  A good default is to send immediate alerts for security events and daily summaries for routine activity.
+</Callout>
+
+## Access and display
+
+Access settings control what each role can see and edit. Display settings control how that content appears on screen. Keep the two concerns separate so you can adjust permissions without changing the interface layout.
+
+### Access rules
+
+| Role | View records | Edit records | Manage settings |
+| --- | --- | --- | --- |
+| Admin | Yes | Yes | Yes |
+| Editor | Yes | Yes | No |
+| Viewer | Yes | No | No |
+
+### Display options
+
+- Default page size: 20 records
+- Compact rows: enabled for dense dashboards
+- High contrast mode: available for accessibility
+- Sidebar visibility: remembered per user
+
+## Advanced notes
+
+<Expandable title="How do you validate configuration?" default-open="false">
+  
+  Validate required fields at startup and fail fast when a critical value is missing. For non-critical options, fall back to safe defaults and log a warning.
+
+</Expandable>
+
+<Expandable title="How do you roll out changes safely?" default-open="false">
+  
+  Update non-production environments first, verify behavior, and then promote the same configuration to production. Keep a change log so you can trace unexpected behavior back to a specific update.
+
+</Expandable>
+
+## Next steps
+
+After you define your settings, connect them to your deployment process and user profile system. You can also document how to override configuration values for specific environments or teams.
+
+<Columns cols={2}>
+  <Card title="Quickstart" icon="book-open" href="/quickstart" horizontal>
+    
+    Learn the minimum setup needed to get the product running.
+
+  </Card>
+  <Card title="Authentication" icon="lock" href="/authentication" horizontal>
+    
+    Review secure sign-in patterns and token handling.
+
+  </Card>
+</Columns>
+
+<Callout kind="tip">
+  This template is intentionally generic. Replace sample values, endpoints, and roles with the conventions used in your own deployment.
+</Callout>

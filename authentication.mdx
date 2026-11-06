@@ -1,0 +1,186 @@
+---
+title: Authentication
+description: Understand how sign-in, permissions, and secure access work in the platform. This page covers the essentials for users and administrators who manage access.
+---
+## Overview
+
+This starter kit page shows a common authentication setup for IL MIO FASCICOLO SANITARIO. You can adapt the examples to match your own identity provider, permission model, and session policies.
+
+Authentication is the process of proving who you are. Authorization is the process of deciding what you can do. You typically configure both together so users sign in once and then receive the right access based on role.
+
+<Callout kind="info">
+  This documentation is a starter template. Replace the sample provider names, roles, and endpoints with your real platform settings.
+</Callout>
+
+## Sign-in methods
+
+Different teams often support more than one sign-in path. The examples below show common options you can adapt for your environment.
+
+<Columns cols={3}>
+  <Card title="Email and password" icon="lock" href="#email-and-password">
+    A simple entry point for internal users and small deployments.
+  </Card>
+  <Card title="Single sign-on" icon="shield" href="#single-sign-on">
+    Centralize access with your identity provider and company policies.
+  </Card>
+  <Card title="One-time code" icon="zap" href="#one-time-code">
+    Send a short-lived code to verify the user without a password.
+  </Card>
+</Columns>
+
+### Email and password
+
+Use this method when you need a straightforward sign-in flow. Pair it with multi-factor authentication to reduce account takeover risk.
+
+### Single sign-on
+
+Single sign-on lets you redirect users to a trusted identity provider, then return them with a signed session token. This is a strong fit for organizations that already manage employee identities centrally.
+
+### One-time code
+
+A one-time code can help when you want a low-friction sign-in experience. Keep the code short-lived and rate limit requests to prevent abuse.
+
+## Roles and permissions
+
+Use roles to group users by responsibility, then assign permissions to control specific actions. A clear model makes access easier to audit and update.
+
+| Role | Typical permissions | Notes |
+|------|---------------------|-------|
+| Administrator | Manage users, settings, and security policies | Use for trusted operators only |
+| Editor | Create and update content | Good for day-to-day contributors |
+| Viewer | Read-only access | Best for audit and review access |
+
+<Expandable title="How to design roles" default-open="false">
+  
+Start with the smallest number of roles that still covers your workflow. Then add permissions only when a real task requires them.
+
+Avoid giving broad access just because it is convenient. Review privileged roles regularly and remove access when responsibilities change.
+
+</Expandable>
+
+## Implementation examples
+
+Use the examples below as a starting point for your own application. The same pattern works whether you store sessions in cookies, JWTs, or a managed auth service.
+
+<CodeGroup tabs="JavaScript,Python">
+  ```javascript
+  async function signIn(email, password) {
+    const response = await fetch("https://auth.example.com/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error("Sign-in failed");
+    }
+
+    return response.json();
+  }
+
+  const session = await signIn("alex.ross@example.com", "S3curePass!2026");
+  console.log(session.user.role);
+  ```
+  ```python
+  import requests
+
+  def sign_in(email, password):
+      response = requests.post(
+          "https://auth.example.com/login",
+          json={
+              "email": email,
+              "password": password
+          },
+          timeout=10,
+      )
+      response.raise_for_status()
+      return response.json()
+
+  session = sign_in("alex.ross@example.com", "S3curePass!2026")
+  print(session["user"]["role"])
+  ```
+</CodeGroup>
+
+### Session handling
+
+Keep sessions short enough to limit risk, but long enough to avoid unnecessary sign-ins. In practice, that often means using secure cookies with rotation or refresh tokens with strict expiry.
+
+You should also invalidate sessions when a user changes their password, signs out from all devices, or loses access to an assigned role.
+
+<Tabs>
+  <Tab title="Cookie-based sessions" icon="cookie">
+    
+    Store the session in an HTTP-only cookie so client-side scripts cannot read it directly. This is a common choice for browser apps.
+
+  </Tab>
+  <Tab title="Token-based sessions" icon="key">
+    
+    Use short-lived access tokens and refresh them before they expire. This can work well for web apps and native clients.
+
+  </Tab>
+  <Tab title="Managed identity" icon="cloud">
+    
+    Delegate session lifecycle to your identity platform and keep your application logic focused on authorization checks.
+
+  </Tab>
+</Tabs>
+
+## Security best practices
+
+<Callout kind="alert">
+  Never log passwords, session tokens, or recovery codes. Keep secrets out of client-side code and rotate credentials on a regular schedule.
+</Callout>
+
+Follow these practices to reduce common authentication issues:
+
+- Require strong passwords where passwords are used.
+- Add multi-factor authentication for privileged accounts.
+- Rate limit sign-in attempts and recovery requests.
+- Use HTTPS everywhere.
+- Expire inactive sessions.
+- Audit role changes and failed sign-in events.
+
+## Access troubleshooting
+
+If a user cannot sign in, work through the problem from the top down. First confirm the identity source is available. Then verify the account status, role assignment, and session settings.
+
+<Steps>
+  <Step title="Check account status" icon="users">
+    
+    Make sure the account is active, verified, and not locked by policy.
+
+  </Step>
+  <Step title="Confirm the sign-in method" icon="check-circle">
+    
+    Verify that the user is using the correct method, such as password, single sign-on, or a one-time code.
+
+  </Step>
+  <Step title="Review permissions" icon="shield">
+    
+    Confirm the assigned role includes the action the user is trying to perform.
+
+  </Step>
+  <Step title="Inspect the session" icon="settings">
+    
+    Clear expired cookies, refresh tokens, or cached credentials if the user is stuck in a loop.
+
+  </Step>
+</Steps>
+
+### Common symptoms
+
+| Symptom | Likely cause | What to check |
+|---------|--------------|----------------|
+| Repeated login failures | Bad credentials or account lockout | Password policy, lockout threshold, identity provider logs |
+| Signed in but denied access | Missing permission | Role mapping and resource policy |
+| Session expires too quickly | Short token lifetime | Cookie expiry, refresh flow, device clock skew |
+| Redirect loop | Misconfigured callback or cookie settings | Redirect URL, domain, secure cookie flags |
+
+## Next steps
+
+Use this page as a baseline, then adapt it to your own access model. If you want a stronger onboarding flow, add a diagram, a recovery guide, or an administrator checklist that matches your internal processes.

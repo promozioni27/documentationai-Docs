@@ -1,0 +1,231 @@
+---
+title: Quickstart
+description: Set up your first project or account and complete an initial workflow in minutes. This guide helps new users move from signup to a working setup quickly.
+---
+
+## Overview
+
+Welcome to the starter kit for IL MIO FASCICOLO SANITARIO. Use this page to create your first account or project, complete setup, and validate that your workflow runs end to end.
+
+This documentation is intentionally generic so you can customize it for your own product, team, or environment. The examples below use realistic values and safe placeholders, so you can adapt them without exposing secrets.
+
+<Callout kind="info">
+  Before you begin, make sure you have a valid account, access to your workspace, and the ability to create or edit a project.
+</Callout>
+
+## What you will set up
+
+<Columns cols={2}>
+  <Card title="Create your workspace" icon="book-open" href="#installation">
+    Start with an account or project shell that you can configure right away.
+  </Card>
+  <Card title="Sign in successfully" icon="lock" href="#first-login">
+    Confirm that your login works and that you can reach the dashboard.
+  </Card>
+  <Card title="Configure basics" icon="settings" href="#initial-configuration">
+    Set the minimum options needed for a working first run.
+  </Card>
+  <Card title="Run your first workflow" icon="zap" href="#first-successful-workflow">
+    Execute a simple flow and verify the result.
+  </Card>
+</Columns>
+
+## Prerequisites
+
+Make sure you have the following ready:
+
+- An account or organization you can sign into
+- A project name you can recognize later
+- A browser or terminal, depending on how you plan to work
+- Any API token or credentials issued by your admin or platform owner
+
+<Callout kind="tip">
+  Keep your first setup small. You can add advanced settings after you confirm the basic workflow works.
+</Callout>
+
+## Installation
+
+Use the steps below to create your initial setup. Replace the sample values with your own project details.
+
+<Steps>
+  <Step title="Create the project" icon="package">
+    Create a new project named `patient-intake-demo` or another name that is easy to identify.
+
+    ```bash
+    mkdir patient-intake-demo
+    cd patient-intake-demo
+    ```
+  </Step>
+  <Step title="Add your configuration" icon="settings">
+    Create a configuration file with your environment values.
+
+    ```bash
+    cat > .env.local <<'EOF'
+    APP_ENV=development
+    PROJECT_NAME=patient-intake-demo
+    API_BASE_URL=https://api.example.com
+    EOF
+    ```
+  </Step>
+  <Step title="Install dependencies" icon="download">
+    Install the package or SDK you plan to use for your first workflow.
+
+    ```bash
+    npm install
+    ```
+  </Step>
+</Steps>
+
+## First login
+
+After you install the basics, sign in and confirm that your account is active. The exact path may vary by product, but the flow is usually the same: open the login page, enter your credentials, and verify that you land in the dashboard.
+
+<Tabs>
+  <Tab title="Browser" icon="monitor">
+
+    Open the sign-in page in your browser, enter your email address, and complete any verification step that appears.
+
+    1. Go to the login screen
+    2. Enter your account email
+    3. Submit the form
+    4. Confirm that you reach the main dashboard
+
+  </Tab>
+  <Tab title="API" icon="code">
+
+    If your workflow uses an API, send a login request and store the returned access token.
+
+    ```bash
+    curl -X POST https://api.example.com/auth/login \
+      -H "Content-Type: application/json" \
+      -d '{
+        "email": "alex@example.com",
+        "password": "correct-horse-battery-staple"
+      }'
+    ```
+
+  </Tab>
+  <Tab title="CLI" icon="terminal">
+
+    If your product supports a command line flow, authenticate from the terminal and confirm the session.
+
+    ```bash
+    npx example-cli login --email alex@example.com
+    ```
+
+  </Tab>
+</Tabs>
+
+## Initial configuration
+
+Once you are signed in, configure the minimum settings needed for a successful first run. A good starter configuration usually includes a workspace name, a base URL, and one or two feature flags.
+
+<CodeGroup tabs="JavaScript,Python,cURL">
+  ```javascript
+  const config = {
+    workspaceName: "patient-intake-demo",
+    apiBaseUrl: "https://api.example.com",
+    featureFlags: {
+      notifications: true,
+      auditTrail: true
+    }
+  };
+
+  console.log("Configuration ready:", config.workspaceName);
+  ```
+  ```python
+  config = {
+      "workspaceName": "patient-intake-demo",
+      "apiBaseUrl": "https://api.example.com",
+      "featureFlags": {
+          "notifications": True,
+          "auditTrail": True
+      }
+  }
+
+  print(f"Configuration ready: {config['workspaceName']}")
+  ```
+  ```bash
+  curl -X PATCH https://api.example.com/v1/workspaces/patient-intake-demo \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer YOUR_TOKEN" \
+    -d '{
+      "featureFlags": {
+        "notifications": true,
+        "auditTrail": true
+      }
+    }'
+  ```
+</CodeGroup>
+
+## First successful workflow
+
+Your first workflow should prove that the setup is functional from start to finish. For example, you can create a record, submit it, and confirm the response.
+
+```javascript
+async function createRecord() {
+  const response = await fetch("https://api.example.com/v1/records", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer YOUR_TOKEN"
+    },
+    body: JSON.stringify({
+      displayName: "First setup check",
+      status: "active"
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error("Record creation failed");
+  }
+
+  const data = await response.json();
+  console.log("Created record ID:", data.id);
+  return data;
+}
+
+createRecord().catch(console.error);
+```
+
+### Success criteria
+
+A first workflow is successful when you can confirm all of the following:
+
+- You can sign in without errors
+- Your configuration is saved
+- Your request or action returns a success response
+- You can see the result in the UI, logs, or API response
+
+<Callout kind="success">
+  If you can complete the workflow once, you have a working baseline. From there, you can extend the setup with more users, environments, or automation.
+</Callout>
+
+## Troubleshooting
+
+<ExpandableGroup>
+  <Expandable title="I cannot sign in" default-open="true">
+    Check your email, password, and any single sign-on requirement. If your organization uses verification codes, make sure the code has not expired.
+  </Expandable>
+  <Expandable title="My configuration does not save" default-open="false">
+    Confirm that required fields are present, the project name is unique, and your token has permission to update settings.
+  </Expandable>
+  <Expandable title="The workflow returns an error" default-open="false">
+    Review the response body, confirm the endpoint URL, and verify that your token or session is still valid.
+  </Expandable>
+</ExpandableGroup>
+
+## Next steps
+
+After your first successful workflow, you can move on to deeper setup and customization:
+
+<Columns cols={2}>
+  <Card title="Add more users" icon="users" href="/authentication">
+    Learn how to expand access and manage authentication safely.
+  </Card>
+  <Card title="Review releases" icon="check-circle" href="/changelog">
+    See what changed and plan your next update.
+  </Card>
+</Columns>
+
+Use this starter page as a foundation. Replace the sample project name, endpoints, and configuration values with your own implementation details, and keep the same structure for a smooth onboarding experience.

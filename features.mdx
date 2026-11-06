@@ -1,0 +1,197 @@
+---
+title: Core Features
+description: Explore the main capabilities of the platform and learn how to use them effectively. This page is ideal for understanding the everyday tasks the product supports.
+---
+
+## Overview
+
+IL MIO FASCICOLO SANITARIO gives you a clear workspace for daily documentation, record management, and navigation. Use this starter kit as a template: replace the sample labels, sections, and workflows with the terms and processes your team actually uses.
+
+The page below focuses on the everyday actions you want users to complete fast: finding the right area, creating or updating records, keeping information organized, and returning to common tasks without friction.
+
+<Callout kind="info">
+
+This is a starter kit template. The examples are intentionally generic so you can adapt them to your product, team, and data model.
+
+</Callout>
+
+## Core capabilities
+
+<Columns cols={3}>
+  <Card title="Dashboard" icon="layout-dashboard" href="/quickstart">
+
+  See summaries, recent activity, and shortcuts to the tasks you use most.
+
+  </Card>
+  <Card title="Records" icon="database" href="/authentication">
+
+  Create, review, and update structured information in one place.
+
+  </Card>
+  <Card title="Search" icon="search" href="/quickstart">
+
+  Find items quickly with filters, saved views, and keyword matching.
+
+  </Card>
+  <Card title="Organization" icon="folder-open" href="/quickstart">
+
+  Group content with tags, categories, and logical sections.
+
+  </Card>
+  <Card title="Workflows" icon="play-circle" href="/quickstart">
+
+  Move through repeatable tasks with fewer steps and less confusion.
+
+  </Card>
+  <Card title="Activity" icon="clock-3" href="/changelog">
+
+  Track recent changes so you can review what happened and when.
+
+  </Card>
+</Columns>
+
+## How the main workflow works
+
+<Steps>
+  <Step title="Open the dashboard" icon="layout-dashboard">
+
+    Start in the dashboard to see your most relevant items. Use it as the launch point for records, search, and navigation.
+
+  </Step>
+  <Step title="Select a record or project" icon="database">
+
+    Choose an existing item to review details, or create a new one when you need a fresh entry.
+
+  </Step>
+  <Step title="Add or update information" icon="settings">
+
+    Edit fields, attach notes, and confirm that the information is complete before saving.
+
+  </Step>
+  <Step title="Organize for later" icon="folder-open">
+
+    Apply tags, sort by category, or save a filtered view so you can return to it quickly.
+
+  </Step>
+</Steps>
+
+## Dashboard and navigation
+
+Use the dashboard to surface the most important content first. Keep the navigation simple and predictable so users can jump between records, search, and organization without extra training.
+
+<Tabs>
+  <Tab title="Dashboard" icon="layout-dashboard">
+
+    The dashboard should show recent items, status summaries, and shortcuts to frequent actions. Keep the layout lightweight and focus on what users need most.
+
+  </Tab>
+  <Tab title="Navigation" icon="chevron-right">
+
+    Group links by task, not by internal system structure. A user should understand where to click without reading a long explanation.
+
+  </Tab>
+  <Tab title="Saved views" icon="bookmark">
+
+    Saved views help users return to a filtered list, such as recent records, favorites, or items needing attention.
+
+  </Tab>
+</Tabs>
+
+## Record management examples
+
+When you document record handling, show the fields users see most often: name, status, date, owner, and notes. Keep the guidance short and action-oriented so users can complete tasks quickly.
+
+<CodeGroup tabs="JavaScript,Python,cURL">
+  ```javascript
+  const response = await fetch("https://api.example.com/records", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer YOUR_API_TOKEN"
+    },
+    body: JSON.stringify({
+      title: "Annual review",
+      status: "open",
+      category: "health",
+      notes: "Created from the dashboard"
+    })
+  });
+
+  const record = await response.json();
+  console.log(record.id);
+  ```
+
+  ```python
+  import requests
+
+  response = requests.post(
+      "https://api.example.com/records",
+      headers={
+          "Content-Type": "application/json",
+          "Authorization": "Bearer YOUR_API_TOKEN"
+      },
+      json={
+          "title": "Annual review",
+          "status": "open",
+          "category": "health",
+          "notes": "Created from the dashboard"
+      }
+  )
+
+  record = response.json()
+  print(record["id"])
+  ```
+
+  ```bash
+  curl -X POST "https://api.example.com/records" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer YOUR_API_TOKEN" \
+    -d '{
+      "title": "Annual review",
+      "status": "open",
+      "category": "health",
+      "notes": "Created from the dashboard"
+    }'
+  ```
+</CodeGroup>
+
+## Search and organization
+
+Search works best when your content uses consistent labels, clear titles, and simple categories. Encourage users to search by terms they actually remember, not by internal system jargon.
+
+| Area | Recommended practice | Why it helps |
+|------|----------------------|-------------|
+| Titles | Use short, specific names | Users find items faster |
+| Tags | Apply 3 to 5 useful tags | Filters stay manageable |
+| Status | Keep statuses consistent | Lists are easier to scan |
+| Notes | Write brief, descriptive notes | Context is easier to recover |
+
+<Expandable title="Common use cases" default-open="false">
+
+You can adapt the same structure for many everyday workflows:
+
+- Reviewing a record before approval
+- Finding the latest version of a document
+- Organizing items by category or owner
+- Tracking recent activity across a team
+- Creating a repeatable intake flow for new entries
+
+</Expandable>
+
+## Best practices
+
+<Callout kind="tip">
+
+If you want users to move quickly, reduce choices on each screen and keep labels consistent across the dashboard, search, and record detail views.
+
+</Callout>
+
+- Use one primary action per screen.
+- Keep list filters visible and predictable.
+- Write field labels in plain language.
+- Show recent activity when history matters.
+- Make saved views easy to edit and reuse.
+
+## Next steps
+
+Once you customize this template, align the examples with your real data, your actual navigation labels, and your preferred workflow names. That way, the documentation reflects the product users see every day.
